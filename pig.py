@@ -3,17 +3,48 @@ import random
 def roll():
     return random.randint(1,6)
 
-def pigTurn():
+def pigTurn(target = 20):
     turnTotal = 0
     rolledOne = False
-    while turnTotal < 20 and not rolledOne:
+    while turnTotal < target and not rolledOne:
         dice =  roll()
-        print("Roll:", dice)
+        #print("Roll:", dice)
         if dice == 1:
             turnTotal = 0
             rolledOne = True
         else:
             turnTotal += dice
-    print("Turn total:", turnTotal)
+    #print("Turn total:", turnTotal)
+    return turnTotal
 
-print(pigTurn())
+def holdAt20Sims(trials):
+    results = {0:0}
+    results[20] = 0
+    results[21] = 0
+    results[22] = 0
+    results[23] = 0
+    results[24] = 0
+    results[25] = 0
+
+    for _ in range(trials):
+        turnTotal = pigTurn()
+        results[turnTotal] += 1
+    print("Turn total\tEstimated Prob")
+    for turnTotal in results:
+        print(turnTotal,results[turnTotal]/trials,sep="\t\t")
+
+def holdAtXSims(trials, target = 20):
+    results = {0:0}
+    for i in range(6):
+        results[target+i] = 0
+    for _ in range(trials):
+        turnTotal = pigTurn(target)
+        results[turnTotal] += 1
+    print("Turn total\tEstimated Prob")
+    for turnTotal in results:
+        print(turnTotal,results[turnTotal]/trials,sep="\t\t")
+
+
+
+
+holdAtXSims(100000,25)
